@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Detection Result - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Back Navigation -->
+    <div class="mb-4">
+        <a href="/disease-detection" class="btn btn-ghost">
+            <i class="fas fa-arrow-left"></i>
+            Back to Detection
+        </a>
+    </div>
+    
+    <!-- Result Section -->
+    <div class="result-container">
+        <!-- Image Section -->
+        <div class="result-image-section">
+            <div class="card">
+                <h3 class="card-title mb-3">Uploaded Image</h3>
+                <img src="{{ image_url }}" alt="Analyzed crop image" class="result-image" onerror="this.src='/static/images/placeholder.jpg'">
+            </div>
+        </div>
+        
+        <!-- Details Section -->
+        <div class="result-details">
+            <!-- Disease Info Card -->
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h3 class="card-title">Detection Result</h3>
+                    {% if 'healthy' in title.lower() %}
+                    <span class="disease-badge healthy">
+                        <i class="fas fa-check-circle"></i>
+                        Healthy
+                    </span>
+                    {% else %}
+                    <span class="disease-badge">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Disease Detected
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <h2 style="font-size: 1.75rem; margin-bottom: 1rem; color: var(--primary);">{{ title }}</h2>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Description</h4>
+                    <p style="color: var(--text-muted); line-height: 1.7;">{{ desc }}</p>
+                </div>
+            </div>
+            
+            <!-- Prevention Card -->
+            <div class="card fade-in stagger-1">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-shield-alt" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Prevention & Treatment
+                </h3>
+                
+                <ul class="treatment-list">
+                    {% for step in prevent.split('\n') if step.strip() %}
+                    <li>{{ step.strip() }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <!-- Supplement Recommendation -->
+            {% if sname %}
+            <div class="card fade-in stagger-2">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-shopping-cart" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Recommended Supplement
+                </h3>
+                
+                <div class="supplement-card">
+                    <img src="{{ simage }}" alt="{{ sname }}" class="supplement-image" onerror="this.src='/static/images/placeholder.jpg'">
+                    <div class="supplement-info">
+                        <h4 class="supplement-name">{{ sname }}</h4>
+                        <p class="supplement-desc">Recommended treatment supplement for {{ title }}</p>
+                        <a href="{{ buy_link }}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Actions -->
+            <div class="card fade-in stagger-3">
+                <h3 class="card-title mb-3">What's Next?</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="/disease-detection" class="btn btn-primary">
+                        <i class="fas fa-camera"></i>
+                        Analyze Another Image
+                    </a>
+                    <a href="/market" class="btn btn-secondary">
+                        <i class="fas fa-store"></i>
+                        Browse Supplements
+                    </a>
+                    <a href="/yield-forecast" class="btn btn-outline">
+                        <i class="fas fa-chart-line"></i>
+                        Check Yield Forecast
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

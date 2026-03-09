@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Croplytics - AI-powered agricultural platform for crop disease detection, yield forecasting, and carbon savings">
+    <meta name="theme-color" content="#10b981">
+    <title>{% block title %}Croplytics{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                </svg>
+                <span>Croplytics</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navMenu">
+                <li><a href="/" class="nav-link {% if request.endpoint == 'home_page' %}active{% endif %}">Dashboard</a></li>
+                <li><a href="/disease-detection" class="nav-link {% if request.endpoint == 'ai_engine_page' %}active{% endif %}">Disease Detection</a></li>
+                <li><a href="/yield-forecast" class="nav-link {% if request.endpoint == 'yield_forecast_page' %}active{% endif %}">Yield Forecast</a></li>
+                <li><a href="/carbon-calculator" class="nav-link {% if request.endpoint == 'carbon_calculator' %}active{% endif %}">Carbon Calculator</a></li>
+                <li><a href="/market" class="nav-link {% if request.endpoint == 'market' %}active{% endif %}">Market</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div class="user-menu">
+                    <div class="user-avatar">{{ current_user.name[0] if current_user.name else 'U' }}</div>
+                    <span>{{ current_user.name or current_user.username }}</span>
+                </div>
+                <a href="/logout" class="btn btn-ghost">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="sr-only">Logout</span>
+                </a>
+            </div>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages" style="position: fixed; top: 90px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem;">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="animation: slideInRight 0.3s ease;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Main Content -->
+    <main class="{% if current_user.is_authenticated %}page-container{% endif %}">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer (optional) -->
+    {% block footer %}{% endblock %}
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

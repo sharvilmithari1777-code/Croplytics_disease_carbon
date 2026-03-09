@@ -1,0 +1,400 @@
+{% extends "base.html" %}
+
+{% block title %}Carbon Calculator - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Page Header -->
+    <section class="section">
+        <div class="text-center mb-4">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Carbon Calculator</h1>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                Track and reduce your agricultural carbon footprint. Estimate CO2 emissions and 
+                see how sustainable farming practices can make a difference.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Calculator Section -->
+    <section class="section">
+        <div class="forecast-grid">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-leaf" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Farm Details
+                </h3>
+                
+                <form id="carbonForm">
+                    <!-- Farm Size -->
+                    <div class="form-group">
+                        <label class="form-label" for="farmSize">Farm Size (hectares)</label>
+                        <input type="number" id="farmSize" name="farmSize" class="form-input" placeholder="Enter farm size" step="0.1" min="0.1" required>
+                    </div>
+                    
+                    <!-- Crop Type -->
+                    <div class="form-group">
+                        <label class="form-label" for="cropType">Primary Crop</label>
+                        <select id="cropType" name="cropType" class="form-input form-select" required>
+                            <option value="">Select crop type</option>
+                            <option value="rice">Rice</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="corn">Corn / Maize</option>
+                            <option value="sugarcane">Sugarcane</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="soybean">Soybean</option>
+                            <option value="potato">Potato</option>
+                            <option value="vegetables">Mixed Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                        </select>
+                    </div>
+                    
+                    <hr style="border-color: var(--border); margin: 1.5rem 0;">
+                    
+                    <!-- Fertilizer Usage -->
+                    <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">Fertilizer Usage</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="nitrogenFertilizer">Nitrogen Fertilizer (kg/year)</label>
+                        <input type="number" id="nitrogenFertilizer" name="nitrogenFertilizer" class="form-input" placeholder="Enter amount" step="1" min="0" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="organicFertilizer">Organic Fertilizer (%)</label>
+                        <input type="range" id="organicFertilizer" name="organicFertilizer" class="range-slider" min="0" max="100" value="20">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            <span>0%</span>
+                            <span id="organicValue">20%</span>
+                            <span>100%</span>
+                        </div>
+                    </div>
+                    
+                    <hr style="border-color: var(--border); margin: 1.5rem 0;">
+                    
+                    <!-- Farming Practices -->
+                    <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">Farming Practices</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" id="noTill" name="noTill">
+                            <span>No-Till / Minimum Tillage</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" id="coverCrops" name="coverCrops">
+                            <span>Cover Crops / Green Manure</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" id="cropRotation" name="cropRotation">
+                            <span>Crop Rotation</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" id="dripIrrigation" name="dripIrrigation">
+                            <span>Drip / Efficient Irrigation</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input" id="solarPower" name="solarPower">
+                            <span>Solar Power Usage</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-full mt-3" id="calculateBtn">
+                        <i class="fas fa-calculator"></i>
+                        Calculate Carbon Footprint
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-pie" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Carbon Analysis
+                </h3>
+                
+                <!-- Empty State -->
+                <div id="emptyState" style="text-align: center; padding: 3rem;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: var(--surface); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-globe-americas" style="font-size: 2rem; color: var(--text-muted);"></i>
+                    </div>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 0.5rem;">Calculate Your Impact</h4>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Fill in your farm details to see your carbon footprint analysis</p>
+                </div>
+                
+                <!-- Results Content -->
+                <div id="resultsContent" style="display: none;">
+                    <!-- Carbon Stats -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div class="card" style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));">
+                            <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Emissions</h4>
+                            <div id="totalEmissions" style="font-size: 2rem; font-weight: 700; color: #ef4444; margin: 0.5rem 0;">--</div>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">tonnes CO2/year</p>
+                        </div>
+                        
+                        <div class="card" style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
+                            <h4 style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Carbon Savings</h4>
+                            <div id="carbonSavings" style="font-size: 2rem; font-weight: 700; color: var(--primary); margin: 0.5rem 0;">--</div>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">tonnes CO2/year</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart -->
+                    <div class="chart-container mb-3">
+                        <canvas id="carbonChart"></canvas>
+                    </div>
+                    
+                    <!-- Comparison -->
+                    <div class="card mb-3">
+                        <h4 style="font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-balance-scale" style="color: var(--info); margin-right: 0.5rem;"></i>
+                            Comparison
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <span style="font-size: 0.875rem;">Your Farm</span>
+                                    <span id="yourFarmPercent" style="font-size: 0.875rem; color: var(--primary);">0%</span>
+                                </div>
+                                <div style="height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden;">
+                                    <div id="yourFarmBar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.5s ease;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                    <span style="font-size: 0.875rem;">Industry Average</span>
+                                    <span style="font-size: 0.875rem; color: var(--text-muted);">100%</span>
+                                </div>
+                                <div style="height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden;">
+                                    <div style="width: 100%; height: 100%; background: var(--text-muted);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recommendations -->
+                    <div class="card">
+                        <h4 style="font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-lightbulb" style="color: var(--warning); margin-right: 0.5rem;"></i>
+                            Recommendations
+                        </h4>
+                        <ul id="recommendations" class="treatment-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Info Section -->
+    <section class="section">
+        <div class="grid grid-3">
+            <div class="card feature-card">
+                <div class="card-icon" style="background: rgba(34, 197, 94, 0.2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: var(--primary);">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">Why It Matters</h4>
+                <p class="card-body">Agriculture contributes 26% of global greenhouse gas emissions. Your choices can help reduce this impact.</p>
+            </div>
+            
+            <div class="card feature-card">
+                <div class="card-icon" style="background: rgba(59, 130, 246, 0.2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: var(--info);">
+                        <path d="M17 8l4 4-4 4V8zM3 12l4-4v8l-4-4zm9-8l4 4H8l4-4zm0 16l-4-4h8l-4 4z"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">Carbon Cycle</h4>
+                <p class="card-body">Sustainable practices help capture carbon in soil, turning your farm from a source to a sink.</p>
+            </div>
+            
+            <div class="card feature-card">
+                <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: var(--warning);">
+                        <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.12 6 2.12v4.78z"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">Future Benefits</h4>
+                <p class="card-body">Reducing emissions now protects soil health, water quality, and ensures sustainable farming for generations.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let carbonChart = null;
+    
+    // Update organic fertilizer display
+    document.getElementById('organicFertilizer').addEventListener('input', function() {
+        document.getElementById('organicValue').textContent = this.value + '%';
+    });
+    
+    // Carbon emission factors (simplified)
+    const emissionFactors = {
+        rice: 3.5,
+        wheat: 1.2,
+        corn: 1.5,
+        sugarcane: 2.0,
+        cotton: 1.8,
+        soybean: 0.8,
+        potato: 1.3,
+        vegetables: 1.0,
+        fruits: 0.9
+    };
+    
+    // Calculate carbon footprint
+    document.getElementById('carbonForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const farmSize = parseFloat(document.getElementById('farmSize').value);
+        const cropType = document.getElementById('cropType').value;
+        const nitrogenFertilizer = parseFloat(document.getElementById('nitrogenFertilizer').value) || 0;
+        const organicPercent = parseFloat(document.getElementById('organicFertilizer').value);
+        
+        const noTill = document.getElementById('noTill').checked;
+        const coverCrops = document.getElementById('coverCrops').checked;
+        const cropRotation = document.getElementById('cropRotation').checked;
+        const dripIrrigation = document.getElementById('dripIrrigation').checked;
+        const solarPower = document.getElementById('solarPower').checked;
+        
+        // Base emissions calculation
+        const baseEmissionFactor = emissionFactors[cropType] || 1.5;
+        let baseEmissions = farmSize * baseEmissionFactor;
+        
+        // Fertilizer emissions (N2O)
+        const fertilizerEmissions = (nitrogenFertilizer * 0.01 * 298 * 44/28) / 1000; // Convert to tonnes CO2e
+        
+        // Total base emissions
+        let totalEmissions = baseEmissions + fertilizerEmissions;
+        
+        // Calculate savings from sustainable practices
+        let savings = 0;
+        const recommendations = [];
+        
+        // Organic fertilizer savings
+        const organicSavings = totalEmissions * (organicPercent / 100) * 0.3;
+        savings += organicSavings;
+        
+        // Practice-based savings
+        if (noTill) {
+            savings += totalEmissions * 0.1;
+        } else {
+            recommendations.push('Consider no-till farming to reduce soil carbon release and save up to 10% emissions');
+        }
+        
+        if (coverCrops) {
+            savings += totalEmissions * 0.15;
+        } else {
+            recommendations.push('Plant cover crops to sequester carbon and improve soil health');
+        }
+        
+        if (cropRotation) {
+            savings += totalEmissions * 0.08;
+        } else {
+            recommendations.push('Implement crop rotation to naturally replenish soil nutrients');
+        }
+        
+        if (dripIrrigation) {
+            savings += totalEmissions * 0.12;
+        } else {
+            recommendations.push('Switch to drip irrigation to reduce water and energy usage');
+        }
+        
+        if (solarPower) {
+            savings += totalEmissions * 0.2;
+        } else {
+            recommendations.push('Consider solar power for farm operations to significantly cut emissions');
+        }
+        
+        if (organicPercent < 50) {
+            recommendations.push('Increase organic fertilizer usage to reduce synthetic fertilizer emissions');
+        }
+        
+        // Net emissions
+        const netEmissions = totalEmissions - savings;
+        const percentOfAverage = Math.round((netEmissions / totalEmissions) * 100);
+        
+        // Update UI
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('resultsContent').style.display = 'block';
+        
+        document.getElementById('totalEmissions').textContent = netEmissions.toFixed(2);
+        document.getElementById('carbonSavings').textContent = savings.toFixed(2);
+        document.getElementById('yourFarmPercent').textContent = percentOfAverage + '%';
+        document.getElementById('yourFarmBar').style.width = percentOfAverage + '%';
+        
+        // Recommendations
+        const recList = document.getElementById('recommendations');
+        recList.innerHTML = '';
+        if (recommendations.length > 0) {
+            recommendations.forEach(rec => {
+                const li = document.createElement('li');
+                li.textContent = rec;
+                recList.appendChild(li);
+            });
+        } else {
+            recList.innerHTML = '<li>Great job! You\'re already implementing best practices for carbon reduction.</li>';
+        }
+        
+        // Update chart
+        updateChart(totalEmissions, savings, netEmissions);
+        
+        Croplytics.showNotification('Carbon footprint calculated!', 'success');
+    });
+    
+    function updateChart(total, savings, net) {
+        const ctx = document.getElementById('carbonChart').getContext('2d');
+        
+        if (carbonChart) {
+            carbonChart.destroy();
+        }
+        
+        carbonChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Net Emissions', 'Carbon Savings'],
+                datasets: [{
+                    data: [net, savings],
+                    backgroundColor: ['rgba(239, 68, 68, 0.8)', 'rgba(34, 197, 94, 0.8)'],
+                    borderColor: ['rgba(239, 68, 68, 1)', 'rgba(34, 197, 94, 1)'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#a3a3a3',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw.toFixed(2) + ' tonnes CO2';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

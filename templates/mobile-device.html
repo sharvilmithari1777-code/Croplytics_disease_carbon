@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Mobile Device - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 100px);">
+    <div class="card text-center" style="max-width: 500px; padding: 3rem;">
+        <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: rgba(245, 158, 11, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-mobile-alt" style="font-size: 2rem; color: var(--warning);"></i>
+        </div>
+        
+        <h1 style="font-size: 1.75rem; margin-bottom: 1rem;">Mobile Device Detected</h1>
+        
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            For the best experience with Croplytics, we recommend using a desktop or laptop computer. 
+            Some features may be limited on mobile devices.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <a href="/" class="btn btn-primary btn-lg">
+                <i class="fas fa-home"></i>
+                Continue to Dashboard
+            </a>
+            <a href="/disease-detection" class="btn btn-secondary btn-lg">
+                <i class="fas fa-camera"></i>
+                Disease Detection
+            </a>
+        </div>
+        
+        <div class="mt-4" style="padding: 1rem; background: var(--surface); border-radius: var(--radius-md);">
+            <p style="font-size: 0.875rem; color: var(--text-muted);">
+                <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                Tip: For accurate disease detection, take clear photos in good lighting conditions.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

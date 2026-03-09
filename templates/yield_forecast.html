@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}Yield Forecast - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Page Header -->
+    <section class="section">
+        <div class="text-center mb-4">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Yield Forecast</h1>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                Predict crop yields based on soil conditions, weather data, and historical trends. 
+                Get personalized recommendations for optimal farming practices.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Forecast Section -->
+    <section class="section">
+        <div class="forecast-grid">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-sliders-h" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Input Parameters
+                </h3>
+                
+                <form id="forecastForm">
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label class="form-label" for="state">State / Region</label>
+                        <select id="state" name="state" class="form-input form-select" required>
+                            <option value="">Select a state</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+                        <button type="button" id="autoFillBtn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-location-arrow"></i>
+                            Use My Location
+                        </button>
+                        <button type="button" id="fetchWeatherBtn" class="btn btn-outline btn-sm">
+                            <i class="fas fa-cloud-sun"></i>
+                            Fetch Weather
+                        </button>
+                    </div>
+                    
+                    <hr style="border-color: var(--border); margin: 1.5rem 0;">
+                    
+                    <!-- Soil Parameters -->
+                    <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">Soil Parameters</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="N">Nitrogen (N)</label>
+                            <input type="number" id="N" name="N" class="form-input" placeholder="kg/ha" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="P">Phosphorus (P)</label>
+                            <input type="number" id="P" name="P" class="form-input" placeholder="kg/ha" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="K">Potassium (K)</label>
+                            <input type="number" id="K" name="K" class="form-input" placeholder="kg/ha" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="pH">Soil pH</label>
+                            <input type="number" id="pH" name="pH" class="form-input" placeholder="0-14" step="0.1" min="0" max="14" required>
+                        </div>
+                    </div>
+                    
+                    <hr style="border-color: var(--border); margin: 1.5rem 0;">
+                    
+                    <!-- Weather Parameters -->
+                    <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">Weather Conditions</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="avg_temp_c">Avg Temperature (C)</label>
+                            <input type="number" id="avg_temp_c" name="avg_temp_c" class="form-input" placeholder="Celsius" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="total_rainfall_mm">Rainfall (mm)</label>
+                            <input type="number" id="total_rainfall_mm" name="total_rainfall_mm" class="form-input" placeholder="mm/year" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label class="form-label" for="avg_humidity_percent">Humidity (%)</label>
+                            <input type="number" id="avg_humidity_percent" name="avg_humidity_percent" class="form-input" placeholder="Percentage" step="0.1" min="0" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-full mt-3" id="predictBtn">
+                        <i class="fas fa-chart-line"></i>
+                        Predict Yield
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section">
+                <h3 class="card-title mb-3">
+                    <i class="fas fa-chart-bar" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Prediction Results
+                </h3>
+                
+                <!-- Loading State -->
+                <div id="loadingState" style="display: none; text-align: center; padding: 3rem;">
+                    <div class="loader" style="margin: 0 auto 1rem;"></div>
+                    <p style="color: var(--text-muted);">Analyzing data and predicting yield...</p>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" style="text-align: center; padding: 3rem;">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: var(--surface); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-seedling" style="font-size: 2rem; color: var(--text-muted);"></i>
+                    </div>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No Prediction Yet</h4>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Fill in the parameters and click "Predict Yield" to see results</p>
+                </div>
+                
+                <!-- Results Content -->
+                <div id="resultsContent" style="display: none;">
+                    <!-- Main Prediction -->
+                    <div class="card mb-3" style="text-align: center; padding: 2rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.05));">
+                        <h4 style="font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Predicted Yield</h4>
+                        <div id="yieldValue" style="font-size: 3rem; font-weight: 700; color: var(--primary); margin: 0.5rem 0;">--</div>
+                        <p id="yieldCategory" style="color: var(--text-secondary);">tonnes/hectare</p>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="stats-row mb-3">
+                        <div class="stat-item">
+                            <div class="value" id="soilHealthValue">--</div>
+                            <div class="label">Soil Health</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value" id="irrigationValue">--</div>
+                            <div class="label">Irrigation</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value" id="cropCycleValue">--</div>
+                            <div class="label">Crop Cycle</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Farming Tips -->
+                    <div class="card">
+                        <h4 style="font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-lightbulb" style="color: var(--warning); margin-right: 0.5rem;"></i>
+                            Farming Tips
+                        </h4>
+                        <ul id="farmingTips" class="treatment-list"></ul>
+                    </div>
+                    
+                    <!-- Weather Risks -->
+                    <div class="card mt-3" id="weatherRisksCard" style="display: none;">
+                        <h4 style="font-size: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--warning); margin-right: 0.5rem;"></i>
+                            Weather Risks
+                        </h4>
+                        <ul id="weatherRisks" class="treatment-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Load states on page load
+    async function loadStates() {
+        try {
+            const response = await fetch('/states');
+            const data = await response.json();
+            
+            if (data.success && data.states) {
+                const stateSelect = document.getElementById('state');
+                data.states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading states:', error);
+        }
+    }
+    
+    // Auto-fill with location
+    document.getElementById('autoFillBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting location...';
+        
+        try {
+            const coords = await Croplytics.getCurrentLocation();
+            
+            // Fetch weather by coordinates
+            const weatherData = await Croplytics.fetchWeatherByCoords(coords.lat, coords.lon);
+            if (weatherData) {
+                document.getElementById('avg_temp_c').value = weatherData.temperature || '';
+                document.getElementById('avg_humidity_percent').value = weatherData.humidity || '';
+                document.getElementById('total_rainfall_mm').value = weatherData.rainfall || 0;
+            }
+            
+            // Fetch soil by coordinates
+            const soilData = await Croplytics.fetchSoilByCoords(coords.lat, coords.lon);
+            if (soilData) {
+                document.getElementById('N').value = soilData.N || '';
+                document.getElementById('P').value = soilData.P || '';
+                document.getElementById('K').value = soilData.K || '';
+                document.getElementById('pH').value = soilData.pH || '';
+                
+                // Set state if available
+                if (soilData.state) {
+                    document.getElementById('state').value = soilData.state;
+                }
+            }
+            
+            Croplytics.showNotification('Location data loaded successfully!', 'success');
+        } catch (error) {
+            console.error('Error getting location:', error);
+            Croplytics.showNotification('Failed to get location. Please enter manually.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-location-arrow"></i> Use My Location';
+        }
+    });
+    
+    // Fetch weather for selected state
+    document.getElementById('fetchWeatherBtn').addEventListener('click', async function() {
+        const state = document.getElementById('state').value;
+        if (!state) {
+            Croplytics.showNotification('Please select a state first', 'error');
+            return;
+        }
+        
+        const btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+        
+        try {
+            const weatherData = await Croplytics.fetchWeatherData(state);
+            if (weatherData) {
+                document.getElementById('avg_temp_c').value = weatherData.temperature || '';
+                document.getElementById('avg_humidity_percent').value = weatherData.humidity || '';
+                document.getElementById('total_rainfall_mm').value = weatherData.rainfall || 0;
+                Croplytics.showNotification('Weather data loaded!', 'success');
+            }
+            
+            const soilData = await Croplytics.fetchSoilData(state);
+            if (soilData) {
+                document.getElementById('N').value = soilData.N || '';
+                document.getElementById('P').value = soilData.P || '';
+                document.getElementById('K').value = soilData.K || '';
+                document.getElementById('pH').value = soilData.pH || '';
+                Croplytics.showNotification('Soil data loaded!', 'success');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            Croplytics.showNotification('Failed to fetch data', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-sun"></i> Fetch Weather';
+        }
+    });
+    
+    // Form submission
+    document.getElementById('forecastForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const predictBtn = document.getElementById('predictBtn');
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const resultsContent = document.getElementById('resultsContent');
+        
+        // Show loading
+        predictBtn.disabled = true;
+        predictBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Predicting...';
+        emptyState.style.display = 'none';
+        resultsContent.style.display = 'none';
+        loadingState.style.display = 'block';
+        
+        // Collect form data
+        const formData = {
+            state: document.getElementById('state').value,
+            N: parseFloat(document.getElementById('N').value),
+            P: parseFloat(document.getElementById('P').value),
+            K: parseFloat(document.getElementById('K').value),
+            pH: parseFloat(document.getElementById('pH').value),
+            avg_temp_c: parseFloat(document.getElementById('avg_temp_c').value),
+            total_rainfall_mm: parseFloat(document.getElementById('total_rainfall_mm').value),
+            avg_humidity_percent: parseFloat(document.getElementById('avg_humidity_percent').value)
+        };
+        
+        try {
+            const result = await Croplytics.predictYield(formData);
+            
+            if (result && result.success) {
+                // Update results
+                document.getElementById('yieldValue').textContent = Croplytics.formatNumber(result.prediction);
+                document.getElementById('yieldCategory').textContent = result.yield_category || 'tonnes/hectare';
+                document.getElementById('soilHealthValue').textContent = result.soil_health || 'Good';
+                document.getElementById('irrigationValue').textContent = result.irrigation || 'Normal';
+                document.getElementById('cropCycleValue').textContent = result.crop_cycle || 'Standard';
+                
+                // Farming tips
+                const tipsList = document.getElementById('farmingTips');
+                tipsList.innerHTML = '';
+                if (result.farming_tips && result.farming_tips.length > 0) {
+                    result.farming_tips.forEach(tip => {
+                        const li = document.createElement('li');
+                        li.textContent = tip;
+                        tipsList.appendChild(li);
+                    });
+                } else {
+                    tipsList.innerHTML = '<li>No specific tips available</li>';
+                }
+                
+                // Weather risks
+                const weatherRisksCard = document.getElementById('weatherRisksCard');
+                const weatherRisksList = document.getElementById('weatherRisks');
+                weatherRisksList.innerHTML = '';
+                if (result.weather_risks && result.weather_risks.length > 0) {
+                    result.weather_risks.forEach(risk => {
+                        const li = document.createElement('li');
+                        li.textContent = risk;
+                        weatherRisksList.appendChild(li);
+                    });
+                    weatherRisksCard.style.display = 'block';
+                } else {
+                    weatherRisksCard.style.display = 'none';
+                }
+                
+                // Show results
+                loadingState.style.display = 'none';
+                resultsContent.style.display = 'block';
+                
+                Croplytics.showNotification('Prediction complete!', 'success');
+            } else {
+                throw new Error(result?.error || 'Prediction failed');
+            }
+        } catch (error) {
+            console.error('Prediction error:', error);
+            Croplytics.showNotification(error.message || 'Failed to predict yield', 'error');
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+        } finally {
+            predictBtn.disabled = false;
+            predictBtn.innerHTML = '<i class="fas fa-chart-line"></i> Predict Yield';
+        }
+    });
+    
+    // Initialize
+    loadStates();
+</script>
+{% endblock %}

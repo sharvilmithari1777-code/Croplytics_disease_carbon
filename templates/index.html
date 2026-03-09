@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Detection - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Page Header -->
+    <section class="section">
+        <div class="text-center mb-4">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Crop Disease Detection</h1>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                Upload a clear image of your crop leaf to identify diseases using our AI-powered analysis. 
+                Get instant results with treatment recommendations.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Upload Section -->
+    <section class="section">
+        <div class="grid grid-2" style="align-items: start;">
+            <!-- Upload Area -->
+            <div class="card">
+                <h3 class="card-title mb-3">Upload Crop Image</h3>
+                
+                <form action="/submit" method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-8-12v12m-4-4l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h4 class="upload-title">Drag and drop your image here</h4>
+                        <p class="upload-subtitle">or click to browse files</p>
+                        <p class="upload-subtitle">Supports: JPG, PNG, GIF, WEBP (Max 10MB)</p>
+                        <input type="file" name="image" id="imageInput" class="upload-input" accept="image/*" required>
+                    </div>
+                    
+                    <!-- Preview Container -->
+                    <div class="preview-container" id="previewContainer">
+                        <img src="" alt="Preview" class="preview-image" id="previewImage">
+                        <div class="preview-info">
+                            <span class="file-name" id="fileName">No file selected</span>
+                            <button type="button" class="btn btn-ghost btn-sm" id="removeImage">
+                                <i class="fas fa-times"></i>
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-full mt-3" id="submitBtn" disabled>
+                        <i class="fas fa-search"></i>
+                        Analyze Image
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="card">
+                <h3 class="card-title mb-3">Tips for Best Results</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(16, 185, 129, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-camera" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Clear Photos</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Take well-lit, focused photos of the affected leaf</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-leaf" style="color: var(--info);"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Single Leaf</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Focus on one leaf showing symptoms for accurate detection</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-sun" style="color: var(--warning);"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Good Lighting</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Natural daylight works best for accurate color detection</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(139, 92, 246, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-expand" style="color: #8b5cf6;"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; margin-bottom: 0.25rem;">Full View</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-muted);">Include the entire leaf in the frame for complete analysis</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4" style="padding: 1rem; background: var(--surface); border-radius: var(--radius-md);">
+                    <h4 style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                        Supported Crops
+                    </h4>
+                    <p style="font-size: 0.875rem; color: var(--text-muted);">
+                        Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, Tomato
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const previewImage = document.getElementById('previewImage');
+    const fileName = document.getElementById('fileName');
+    const removeBtn = document.getElementById('removeImage');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Click to upload
+    uploadArea.addEventListener('click', () => imageInput.click());
+    
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            imageInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    // File input change
+    imageInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    
+    // Handle file selection
+    function handleFileSelect(file) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            Croplytics.showNotification('Please select a valid image file (JPG, PNG, GIF, WEBP)', 'error');
+            return;
+        }
+        
+        // Validate file size (max 10MB)
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            Croplytics.showNotification('File size must be less than 10MB', 'error');
+            return;
+        }
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewContainer.classList.add('active');
+            uploadArea.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+        
+        // Update file name
+        fileName.textContent = file.name;
+        
+        // Enable submit button
+        submitBtn.disabled = false;
+        
+        Croplytics.showNotification('Image selected successfully!', 'success');
+    }
+    
+    // Remove image
+    removeBtn.addEventListener('click', () => {
+        imageInput.value = '';
+        previewContainer.classList.remove('active');
+        uploadArea.style.display = 'block';
+        submitBtn.disabled = true;
+    });
+    
+    // Form submit
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+    });
+</script>
+{% endblock %}

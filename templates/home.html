@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Croplytics{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Welcome to Croplytics</h1>
+        <p class="hero-subtitle">
+            AI-powered agricultural insights for smarter farming decisions. 
+            Detect crop diseases, forecast yields, and track your carbon savings.
+        </p>
+        <div class="hero-actions">
+            <a href="/disease-detection" class="btn btn-primary btn-lg">
+                <i class="fas fa-leaf"></i>
+                Start Disease Detection
+            </a>
+            <a href="/yield-forecast" class="btn btn-secondary btn-lg">
+                <i class="fas fa-chart-line"></i>
+                Forecast Yield
+            </a>
+        </div>
+    </section>
+    
+    <!-- Quick Actions -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Quick Actions</h2>
+        </div>
+        <div class="quick-actions">
+            <a href="/disease-detection" class="action-card">
+                <div class="action-icon green">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M17.75 3.125a.625.625 0 0 1 1.25 0V4h.875a.625.625 0 0 1 0 1.25H19v.875a.625.625 0 0 1-1.25 0V5.25h-.875a.625.625 0 0 1 0-1.25h.875v-.875ZM12 2.5c5.523 0 10 4.477 10 10 0 .905-.12 1.781-.345 2.616a.625.625 0 0 1-1.203-.342c.196-.69.298-1.428.298-2.274 0-4.832-3.918-8.75-8.75-8.75S3.25 7.668 3.25 12.5 7.168 21.25 12 21.25c.846 0 1.584-.102 2.274-.298a.625.625 0 0 1 .342 1.203 11.049 11.049 0 0 1-2.616.345C6.477 22.5 2 18.023 2 12.5s4.477-10 10-10Zm.625 4.875a.625.625 0 0 0-1.25 0v5.086l-3.72 3.72a.625.625 0 0 0 .884.884l3.902-3.902a.625.625 0 0 0 .184-.443V7.375Zm6.25 10a.625.625 0 0 1 1.25 0v.875h.875a.625.625 0 0 1 0 1.25h-.875v.875a.625.625 0 0 1-1.25 0V19.5h-.875a.625.625 0 0 1 0-1.25h.875v-.875Z"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Disease Detection</h3>
+                <p class="action-desc">Upload crop images to identify diseases using AI-powered analysis</p>
+            </a>
+            
+            <a href="/yield-forecast" class="action-card">
+                <div class="action-icon blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M3.75 21V3.75H2.5a.625.625 0 0 1 0-1.25h2.25a.625.625 0 0 1 .625.625v17.25h15.5a.625.625 0 0 1 0 1.25H4.375a.625.625 0 0 1-.625-.625Zm17.03-13.78a.625.625 0 0 1 0 .884l-4.5 4.5a.625.625 0 0 1-.884 0l-3-3-4.116 4.116a.625.625 0 0 1-.884-.884l4.558-4.558a.625.625 0 0 1 .884 0l3 3 4.058-4.058a.625.625 0 0 1 .884 0Z"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Yield Forecast</h3>
+                <p class="action-desc">Predict crop yields based on soil data, weather, and historical trends</p>
+            </a>
+            
+            <a href="/carbon-calculator" class="action-card">
+                <div class="action-icon orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8Zm-1-6h2v2h-2v-2Zm0-8h2v6h-2V6Z"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Carbon Calculator</h3>
+                <p class="action-desc">Track and reduce your agricultural carbon footprint with smart insights</p>
+            </a>
+            
+            <a href="/market" class="action-card">
+                <div class="action-icon purple">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M7 4h10a2 2 0 0 1 2 2v2H5V6a2 2 0 0 1 2-2Zm12 6H5v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10Zm-9 2h4a1 1 0 0 1 0 2h-4a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">Supplement Market</h3>
+                <p class="action-desc">Find recommended fertilizers and supplements for your crops</p>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Platform Statistics</h2>
+        </div>
+        <div class="grid grid-4">
+            <div class="card stat-card">
+                <div class="stat-value">39+</div>
+                <div class="stat-label">Disease Types</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Detection Accuracy</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">10+</div>
+                <div class="stat-label">Indian States</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value">Real-time</div>
+                <div class="stat-label">Weather Data</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">How It Works</h2>
+        </div>
+        <div class="grid grid-3">
+            <div class="card feature-card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M4 16v2a2 2 0 0 0 2 2h2M4 8V6a2 2 0 0 1 2-2h2m8 16h2a2 2 0 0 0 2-2v-2m0-8V6a2 2 0 0 0-2-2h-2"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">1. Upload Image</h4>
+                <p class="card-body">Take a photo of your crop leaf or upload an existing image for analysis</p>
+            </div>
+            
+            <div class="card feature-card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8Zm4-9h-3V8a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2Z"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">2. AI Analysis</h4>
+                <p class="card-body">Our deep learning model analyzes the image to detect any diseases</p>
+            </div>
+            
+            <div class="card feature-card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </div>
+                <h4 class="card-title">3. Get Results</h4>
+                <p class="card-body">Receive detailed diagnosis with treatment recommendations</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;">Ready to Get Started?</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Upload your first crop image and see how Croplytics can help you maintain healthy crops and maximize yields.
+            </p>
+            <a href="/disease-detection" class="btn btn-primary btn-lg">
+                <i class="fas fa-camera"></i>
+                Upload Crop Image
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}

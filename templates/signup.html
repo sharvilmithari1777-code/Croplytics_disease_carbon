@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Croplytics{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card fade-in">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                </svg>
+                <span class="auth-logo-text">Croplytics</span>
+            </div>
+            <h1 class="auth-title">Create an account</h1>
+            <p class="auth-subtitle">Join Croplytics and start your farming journey</p>
+        </div>
+        
+        {% if request.args.get('error') %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ request.args.get('error') }}
+        </div>
+        {% endif %}
+        
+        <form class="auth-form" method="POST" action="/signup" data-validate>
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="Choose a username"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Create a password"
+                    required
+                    autocomplete="new-password"
+                    data-min-length="6"
+                >
+                <small class="text-muted" style="font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+                    Must be at least 6 characters
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="confirm-password">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirm-password" 
+                    name="confirm_password" 
+                    class="form-input" 
+                    placeholder="Confirm your password"
+                    required
+                    autocomplete="new-password"
+                    data-confirm="#password"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-check">
+                    <input type="checkbox" class="form-check-input" name="terms" required>
+                    <span>I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a></span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-lg w-full">
+                Create Account
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/login">Sign in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Password confirmation validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+    
+    confirmPassword.addEventListener('input', function() {
+        if (this.value !== password.value) {
+            this.setCustomValidity('Passwords do not match');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+    
+    password.addEventListener('input', function() {
+        if (confirmPassword.value && this.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('Passwords do not match');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    });
+</script>
+{% endblock %}
