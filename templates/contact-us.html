@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="contact-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Get In Touch</h1>
+            <p class="dashboard-subtitle">
+                Have questions or need assistance? We're here to help you succeed in your farming journey.
+            </p>
+        </div>
+        
+        <!-- Contact Info Cards -->
+        <div class="contact-grid" style="margin-bottom: 3rem;">
+            <div class="contact-info-card">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                    <p class="contact-label">Email Us</p>
+                    <p class="contact-value">support@croplytics.com</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon" style="background: rgba(14, 165, 233, 0.1); color: var(--secondary);">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div>
+                    <p class="contact-label">Call Us</p>
+                    <p class="contact-value">+91 98765 43210</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--accent);">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                    <p class="contact-label">Visit Us</p>
+                    <p class="contact-value">Pune, Maharashtra, India</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="contact-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--primary);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <p class="contact-label">Working Hours</p>
+                    <p class="contact-value">Mon - Sat: 9AM - 6PM</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="glass-card">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+                <i class="fas fa-paper-plane" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                Send Us a Message
+            </h2>
+            
+            <form id="contactForm" data-validate>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="subject">Subject</label>
+                    <select id="subject" name="subject" class="form-input" required>
+                        <option value="">Select a topic...</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="support">Technical Support</option>
+                        <option value="disease">Disease Detection Help</option>
+                        <option value="forecast">Yield Forecasting</option>
+                        <option value="feedback">Feedback & Suggestions</option>
+                        <option value="partnership">Partnership Opportunities</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="message">Your Message</label>
+                    <textarea id="message" name="message" class="form-input" rows="6" placeholder="How can we help you?" required style="resize: vertical;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+        
+        <!-- FAQ Section -->
+        <div class="glass-card" style="margin-top: 3rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+                <i class="fas fa-question-circle" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                Frequently Asked Questions
+            </h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--background); padding: 1.5rem; border-radius: 14px;">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">How accurate is the disease detection?</h4>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Our AI model has been trained on thousands of images and achieves an accuracy rate of over 92% for most common crop diseases.</p>
+                </div>
+                
+                <div style="background: var(--background); padding: 1.5rem; border-radius: 14px;">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Which crops are supported?</h4>
+                    <p style="color: var(--text-muted); line-height: 1.6;">We currently support 14 crop types including Apple, Tomato, Potato, Corn, Grape, and more. We're continuously adding support for new crops.</p>
+                </div>
+                
+                <div style="background: var(--background); padding: 1.5rem; border-radius: 14px;">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Is my data secure?</h4>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Yes, we take data security seriously. All uploaded images are processed securely and we don't share your data with third parties.</p>
+                </div>
+                
+                <div style="background: var(--background); padding: 1.5rem; border-radius: 14px;">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">How do I get the most accurate yield predictions?</h4>
+                    <p style="color: var(--text-muted); line-height: 1.6;">Provide accurate soil test results and use the location feature to get real-time weather data. The more accurate your inputs, the better our predictions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulate form submission
+    showLoading();
+    
+    setTimeout(() => {
+        hideLoading();
+        showAlert('Thank you for your message! We\'ll get back to you within 24 hours.', 'success');
+        this.reset();
+    }, 1500);
+});
+</script>
+{% endblock %}

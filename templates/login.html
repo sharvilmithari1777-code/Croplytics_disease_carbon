@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box glass">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="auth-title">Welcome Back</h1>
+            <p class="auth-subtitle">Sign in to continue to Croplytics</p>
+        </div>
+        
+        {% if error %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+        
+        {% if success %}
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ success }}</span>
+        </div>
+        {% endif %}
+        
+        <form action="{{ url_for('login') }}" method="POST" data-validate>
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="Enter your username"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-muted);">
+                    <input type="checkbox" name="remember" style="accent-color: var(--primary);">
+                    Remember me
+                </label>
+                <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.875rem;">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+            <p style="color: var(--text-muted);">
+                Don't have an account? 
+                <a href="{{ url_for('signup') }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">Create Account</a>
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <p style="color: var(--text-muted); font-size: 0.75rem;">
+                Demo credentials: <span style="color: var(--text);">rutugandh / 1234</span>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

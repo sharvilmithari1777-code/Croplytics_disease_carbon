@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Detection{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="upload-container">
+        <div class="upload-header">
+            <h1 class="upload-title">Crop Disease Detection</h1>
+            <p class="upload-subtitle">Upload a clear photo of your crop leaf to detect potential diseases</p>
+        </div>
+        
+        <div class="glass-card">
+            <form id="uploadForm" action="{{ url_for('submit') }}" method="POST" enctype="multipart/form-data">
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p class="upload-text">Drag & drop your image here</p>
+                    <p class="upload-hint">or click to browse (JPEG, PNG, GIF - Max 10MB)</p>
+                    <input type="file" name="image" id="fileInput" class="file-input" accept="image/*" required>
+                </div>
+                
+                <!-- Preview Container -->
+                <div class="preview-container" id="previewContainer">
+                    <div style="text-align: center;">
+                        <img id="previewImage" class="preview-image" src="" alt="Preview">
+                    </div>
+                    <div class="preview-info">
+                        <div>
+                            <span id="fileName" class="file-name">filename.jpg</span>
+                            <span id="fileSize" class="file-size">2.4 MB</span>
+                        </div>
+                        <button type="button" id="removeFile" class="btn-remove">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-search"></i> Analyze Image
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Tips Section -->
+        <div class="glass-card" style="margin-top: 2rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">
+                <i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                Tips for Best Results
+            </h3>
+            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.25rem;">
+                <li>Take photos in good natural lighting</li>
+                <li>Focus on the affected area of the leaf</li>
+                <li>Avoid blurry or out-of-focus images</li>
+                <li>Include both healthy and affected parts if possible</li>
+                <li>Upload one leaf image at a time for accurate results</li>
+            </ul>
+        </div>
+        
+        <!-- Supported Crops -->
+        <div class="glass-card" style="margin-top: 2rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">
+                <i class="fas fa-leaf" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                Supported Crops
+            </h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                {% for crop in ['Apple', 'Blueberry', 'Cherry', 'Corn', 'Grape', 'Orange', 'Peach', 'Pepper', 'Potato', 'Raspberry', 'Soybean', 'Squash', 'Strawberry', 'Tomato'] %}
+                <span style="padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 50px; font-size: 0.875rem; color: var(--text);">
+                    {{ crop }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput.files.length) {
+        e.preventDefault();
+        showAlert('Please select an image to upload', 'error');
+        return;
+    }
+    showLoading();
+});
+</script>
+{% endblock %}

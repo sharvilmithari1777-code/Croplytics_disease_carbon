@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <p class="welcome-text">Welcome back, {{ current_user.name }}</p>
+        <h1 class="dashboard-title">Your Agriculture Dashboard</h1>
+        <p class="dashboard-subtitle">
+            Monitor your crops, detect diseases early, forecast yields, and track your carbon footprint - all in one place.
+        </p>
+    </div>
+    
+    <!-- Stats Section -->
+    <div class="stats-grid stagger-children">
+        <div class="stat-card glass-card">
+            <div class="stat-value">39</div>
+            <div class="stat-label">Diseases Detectable</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-value">95%</div>
+            <div class="stat-label">Detection Accuracy</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Indian States Covered</div>
+        </div>
+        <div class="stat-card glass-card">
+            <div class="stat-value">24/7</div>
+            <div class="stat-label">Real-time Analysis</div>
+        </div>
+    </div>
+    
+    <!-- Features Grid -->
+    <div class="features-grid stagger-children">
+        <!-- Disease Detection Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon">
+                <i class="fas fa-microscope"></i>
+            </div>
+            <h3 class="feature-title">Disease Detection</h3>
+            <p class="feature-description">
+                Upload photos of your crop leaves and our AI will instantly identify any diseases. 
+                Get actionable treatment recommendations and supplement suggestions.
+            </p>
+            <a href="{{ url_for('ai_engine_page') }}" class="feature-link">
+                Start Detection <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Yield Forecast Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon blue">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="feature-title">Yield Forecasting</h3>
+            <p class="feature-description">
+                Predict your crop yields using advanced machine learning models. 
+                Input soil data and weather conditions to get accurate harvest predictions.
+            </p>
+            <a href="{{ url_for('yield_forecast_page') }}" class="feature-link">
+                Forecast Yield <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Carbon Calculator Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon orange">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <h3 class="feature-title">Carbon Calculator</h3>
+            <p class="feature-description">
+                Calculate and track your farm's carbon footprint. 
+                Get insights on how to reduce emissions and farm more sustainably.
+            </p>
+            <a href="{{ url_for('carbon_calculator') }}" class="feature-link">
+                Calculate Footprint <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Market/Supplements Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon">
+                <i class="fas fa-store"></i>
+            </div>
+            <h3 class="feature-title">Supplement Market</h3>
+            <p class="feature-description">
+                Browse our curated marketplace of agricultural supplements. 
+                Find the right treatments for any crop disease identified by our AI.
+            </p>
+            <a href="{{ url_for('market') }}" class="feature-link">
+                Browse Market <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Weather Integration Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon blue">
+                <i class="fas fa-cloud-sun"></i>
+            </div>
+            <h3 class="feature-title">Weather Integration</h3>
+            <p class="feature-description">
+                Real-time weather data integration for your location. 
+                Get accurate forecasts to plan irrigation and harvesting schedules.
+            </p>
+            <a href="{{ url_for('yield_forecast_page') }}" class="feature-link">
+                View Weather <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Contact/Support Card -->
+        <div class="feature-card glass-card">
+            <div class="feature-icon orange">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h3 class="feature-title">Expert Support</h3>
+            <p class="feature-description">
+                Need help? Our team of agricultural experts is here to assist you 
+                with any questions about crop management and disease prevention.
+            </p>
+            <a href="{{ url_for('contact') }}" class="feature-link">
+                Contact Us <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Section -->
+    <div style="text-align: center; padding: 4rem 0;">
+        <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem;">Ready to Get Started?</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+            Upload an image of your crop to detect diseases, or enter your farm details to forecast yields.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('ai_engine_page') }}" class="btn btn-primary">
+                <i class="fas fa-upload"></i> Upload Crop Image
+            </a>
+            <a href="{{ url_for('yield_forecast_page') }}" class="btn btn-secondary">
+                <i class="fas fa-calculator"></i> Predict Yield
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Carbon Calculator{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="carbon-container">
+        <div class="carbon-header">
+            <h1 class="dashboard-title">Carbon Footprint Calculator</h1>
+            <p class="dashboard-subtitle">
+                Calculate your farm's environmental impact and discover ways to reduce your carbon emissions.
+            </p>
+        </div>
+        
+        <div class="glass-card">
+            <form id="carbonForm">
+                <div class="carbon-form">
+                    <!-- Land Area -->
+                    <div class="form-group">
+                        <label class="form-label" for="landArea">
+                            <i class="fas fa-map" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                            Land Area (hectares)
+                        </label>
+                        <input type="number" id="landArea" name="landArea" class="form-input" placeholder="e.g., 10" step="0.1" min="0" required>
+                    </div>
+                    
+                    <!-- Fertilizer Usage -->
+                    <div class="form-group">
+                        <label class="form-label" for="fertilizerKg">
+                            <i class="fas fa-flask" style="color: var(--secondary); margin-right: 0.5rem;"></i>
+                            Fertilizer Usage (kg/year)
+                        </label>
+                        <input type="number" id="fertilizerKg" name="fertilizerKg" class="form-input" placeholder="e.g., 500" step="0.1" min="0" required>
+                    </div>
+                    
+                    <!-- Pesticide Usage -->
+                    <div class="form-group">
+                        <label class="form-label" for="pesticideKg">
+                            <i class="fas fa-bug" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                            Pesticide Usage (kg/year)
+                        </label>
+                        <input type="number" id="pesticideKg" name="pesticideKg" class="form-input" placeholder="e.g., 50" step="0.1" min="0" required>
+                    </div>
+                    
+                    <!-- Fuel Consumption -->
+                    <div class="form-group">
+                        <label class="form-label" for="fuelLiters">
+                            <i class="fas fa-gas-pump" style="color: var(--error); margin-right: 0.5rem;"></i>
+                            Diesel/Fuel (liters/year)
+                        </label>
+                        <input type="number" id="fuelLiters" name="fuelLiters" class="form-input" placeholder="e.g., 1000" step="0.1" min="0" required>
+                    </div>
+                    
+                    <!-- Electricity Usage -->
+                    <div class="form-group">
+                        <label class="form-label" for="electricityKwh">
+                            <i class="fas fa-bolt" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                            Electricity (kWh/year)
+                        </label>
+                        <input type="number" id="electricityKwh" name="electricityKwh" class="form-input" placeholder="e.g., 5000" step="0.1" min="0" required>
+                    </div>
+                    
+                    <!-- Irrigation Type -->
+                    <div class="form-group">
+                        <label class="form-label" for="irrigationType">
+                            <i class="fas fa-tint" style="color: var(--secondary); margin-right: 0.5rem;"></i>
+                            Irrigation Type
+                        </label>
+                        <select id="irrigationType" name="irrigationType" class="form-input" required>
+                            <option value="none">No Irrigation (Rain-fed)</option>
+                            <option value="drip">Drip Irrigation</option>
+                            <option value="sprinkler">Sprinkler System</option>
+                            <option value="flood">Flood Irrigation</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full" style="margin-top: 2rem;">
+                    <i class="fas fa-calculator"></i> Calculate Carbon Footprint
+                </button>
+            </form>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="resultsSection" style="display: none;">
+            <!-- Total Emissions -->
+            <div class="carbon-result glass-card">
+                <div style="width: 120px; height: 120px; margin: 0 auto 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-cloud" style="font-size: 3rem; color: var(--primary);"></i>
+                </div>
+                <p class="carbon-value" id="totalEmissions">0</p>
+                <p class="carbon-label">kg CO2 equivalent per year</p>
+                <p id="perHectare" style="color: var(--primary); margin-top: 0.5rem;"></p>
+            </div>
+            
+            <!-- Breakdown -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">
+                    <i class="fas fa-chart-pie" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Emissions Breakdown
+                </h3>
+                <div id="breakdownGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;"></div>
+            </div>
+            
+            <!-- Reduction Tips -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">
+                    <i class="fas fa-leaf" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                    Tips to Reduce Your Carbon Footprint
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--secondary);">
+                            <i class="fas fa-tint"></i> Smart Irrigation
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Switch to drip irrigation to reduce water usage by up to 60% and lower energy costs associated with pumping.
+                        </p>
+                    </div>
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--accent);">
+                            <i class="fas fa-recycle"></i> Organic Fertilizers
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Use organic compost and biofertilizers to reduce chemical fertilizer usage and improve soil health naturally.
+                        </p>
+                    </div>
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                            <i class="fas fa-solar-panel"></i> Renewable Energy
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Install solar panels to power irrigation pumps and farm equipment, reducing reliance on fossil fuels.
+                        </p>
+                    </div>
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--error);">
+                            <i class="fas fa-bug"></i> Integrated Pest Management
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Adopt IPM practices to reduce pesticide usage while effectively managing pests through biological controls.
+                        </p>
+                    </div>
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--secondary);">
+                            <i class="fas fa-tree"></i> Agroforestry
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Plant trees on your farm to sequester carbon, provide shade, and create additional income streams.
+                        </p>
+                    </div>
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 16px;">
+                        <h4 style="font-weight: 600; margin-bottom: 0.5rem; color: var(--accent);">
+                            <i class="fas fa-tractor"></i> Efficient Machinery
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">
+                            Maintain farm equipment regularly and consider upgrading to more fuel-efficient models.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('carbonForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        landArea: parseFloat(document.getElementById('landArea').value) || 0,
+        fertilizerKg: parseFloat(document.getElementById('fertilizerKg').value) || 0,
+        pesticideKg: parseFloat(document.getElementById('pesticideKg').value) || 0,
+        fuelLiters: parseFloat(document.getElementById('fuelLiters').value) || 0,
+        electricityKwh: parseFloat(document.getElementById('electricityKwh').value) || 0,
+        irrigationType: document.getElementById('irrigationType').value
+    };
+    
+    const result = calculateCarbonFootprint(data);
+    displayResults(result);
+});
+
+function displayResults(result) {
+    const resultsSection = document.getElementById('resultsSection');
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+    
+    // Animate total emissions
+    const totalEl = document.getElementById('totalEmissions');
+    animateValue(totalEl, 0, result.total, 1500);
+    
+    // Per hectare
+    document.getElementById('perHectare').textContent = 
+        result.perHectare > 0 ? `${result.perHectare} kg CO2e per hectare` : '';
+    
+    // Breakdown
+    const breakdown = result.breakdown;
+    const colors = {
+        fertilizer: 'var(--secondary)',
+        pesticide: 'var(--accent)',
+        fuel: 'var(--error)',
+        electricity: 'var(--warning)',
+        irrigation: 'var(--primary)'
+    };
+    const icons = {
+        fertilizer: 'fa-flask',
+        pesticide: 'fa-bug',
+        fuel: 'fa-gas-pump',
+        electricity: 'fa-bolt',
+        irrigation: 'fa-tint'
+    };
+    const labels = {
+        fertilizer: 'Fertilizers',
+        pesticide: 'Pesticides',
+        fuel: 'Fuel',
+        electricity: 'Electricity',
+        irrigation: 'Irrigation'
+    };
+    
+    const breakdownGrid = document.getElementById('breakdownGrid');
+    breakdownGrid.innerHTML = '';
+    
+    for (const [key, value] of Object.entries(breakdown)) {
+        const percentage = result.total > 0 ? Math.round((value / result.total) * 100) : 0;
+        breakdownGrid.innerHTML += `
+            <div style="background: var(--background); padding: 1.25rem; border-radius: 14px;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: ${colors[key]}20; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas ${icons[key]}" style="color: ${colors[key]};"></i>
+                    </div>
+                    <span style="font-weight: 500;">${labels[key]}</span>
+                </div>
+                <p style="font-size: 1.5rem; font-weight: 700;">${value} <span style="font-size: 0.875rem; color: var(--text-muted);">kg</span></p>
+                <div style="background: var(--background-light); border-radius: 4px; height: 6px; margin-top: 0.5rem; overflow: hidden;">
+                    <div style="background: ${colors[key]}; height: 100%; width: ${percentage}%; transition: width 1s ease;"></div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">${percentage}% of total</p>
+            </div>
+        `;
+    }
+}
+
+function animateValue(el, start, end, duration) {
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (end - start) * easeOut);
+        el.textContent = current.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+</script>
+{% endblock %}
